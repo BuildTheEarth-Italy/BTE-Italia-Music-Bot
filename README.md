@@ -7,6 +7,7 @@
 # 🤖 BTE Italia (Discord Music Bot)
 
 > BTE Italia is a Discord Music Bot built with TypeScript, discord.js & uses Command Handler from [discordjs.guide](https://discordjs.guide)
+> (Forked from EvoBot)
 
 ## Requirements
 

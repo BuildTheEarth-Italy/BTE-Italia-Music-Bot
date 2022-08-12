@@ -96,7 +96,7 @@ Examples: `1` or `1,2,3`
 - Command Handler from [discordjs.guide](https://discordjs.guide/)
 - Media Controls via Reactions
 
-![reactions](https://i.imgur.com/9S7Omf9.png)
+![reactions](https://imgur.com/Ptfmi04.png)
 
 ## 🌎 Locales
 

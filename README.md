@@ -41,10 +41,6 @@ Copy or Rename `config.json.example` to `config.json` and fill out the values:
 }
 ```
 
-```shell
-docker run -e "TOKEN=<discord-token>" eritislami/evobot
-```
-
 ## 📝 Features & Commands
 
 > Note: The default prefix is '$'

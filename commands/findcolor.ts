@@ -47,8 +47,6 @@ export default {
       a: 255
     };
 
-    const luma = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-
     // get closest textures
     const distances: [string, number][] = [];
 
@@ -70,19 +68,26 @@ export default {
     const output = new Jimp(1440, 480);
     let font;
     // Load font color whether background is light or dark
-    if (luma > 128) {
-      font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
+    const lightness = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
+    if (lightness > 128) {
+      font = await Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
     } else {
-      font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
+      font = await Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
     }
 
     output.composite(one, 0, 0);
     output.composite(two, 480, 0);
     output.composite(three, 960, 0);
-
     output.print(font, 10, 10, "Command made by Pizzax#9454");
-    const imgBuffer = await output.getBufferAsync(Jimp.MIME_PNG);
 
-    message.reply({ files: [imgBuffer], content: "**Textures**" }).catch(console.error);
+    const imgBuffer = await output.getBufferAsync(Jimp.MIME_PNG);
+    const outputName = message.id + ".png";
+    fs.writeFileSync(path.join("temp/", outputName), imgBuffer);
+
+    // make embed
+    const embed = new MessageEmbed().setTitle("Textures").setImage(`attachment://${outputName}`);
+    await message.reply({ embeds: [embed], files: [path.join("temp/", outputName)] }).catch(console.error);
+
+    fs.unlinkSync(path.join("temp/", outputName));
   }
 };

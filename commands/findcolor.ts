@@ -82,12 +82,12 @@ export default {
 
     const imgBuffer = await output.getBufferAsync(Jimp.MIME_PNG);
     const outputName = message.id + ".png";
-    fs.writeFileSync(path.join("temp/", outputName), imgBuffer);
+    fs.writeFileSync("./temp/" + outputName, imgBuffer);
 
     // make embed
     const embed = new MessageEmbed().setTitle("Textures").setImage(`attachment://${outputName}`);
-    await message.reply({ embeds: [embed], files: [path.join("temp/", outputName)] }).catch(console.error);
+    await message.reply({ embeds: [embed], files: ["./temp/" + outputName] }).catch(console.error);
 
-    fs.unlinkSync(path.join("temp/", outputName));
+    fs.unlinkSync("./temp/" + outputName);
   }
 };

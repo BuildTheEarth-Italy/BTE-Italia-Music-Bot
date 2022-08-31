@@ -1,14 +1,9 @@
 import { Message, MessageAttachment, MessageEmbed } from "discord.js";
 import { bot } from "../index";
 import Jimp from "jimp";
+import fs from "fs";
+import path from "path";
 import { colorDistance } from "../utils/colorDistance";
-
-interface Color {
-  r: number;
-  g: number;
-  b: number;
-  a: number;
-}
 
 export default {
   name: "findcolor",
@@ -16,7 +11,8 @@ export default {
   description: "find color",
   async execute(message: Message) {
     const allowedFileExtensions: string[] = [".png", "jpeg", ".jpg"];
-    const textures = await bot.textures;
+    const texturesJSON = fs.readFileSync(path.resolve("utils/textures.json"));
+    const textures = JSON.parse(texturesJSON.toString());
 
     // Get image from message
     const attachment: MessageAttachment | undefined = message.attachments.first();
@@ -54,18 +50,21 @@ export default {
     const luma = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
 
     // get closest textures
-    const distances = new Map();
-    textures.forEach((image, c) => {
-      distances.set(c, colorDistance(color, c));
-    });
+    const distances: [string, number][] = [];
 
-    const sortedDistances = new Map([...distances.entries()].sort((a, b) => a[1] - b[1]));
+    // get color distance between image and every texture
+    let i = 0;
+    for (const texture in textures) {
+      distances[i] = [texture, colorDistance(color, textures[texture])];
+      i++;
+    }
 
-    const sortedTextures = Array.from(sortedDistances.keys());
+    // sort textures by distance
+    distances.sort((a, b) => a[1] - b[1]);
 
-    const one = textures.get(sortedTextures[0]);
-    const two = textures.get(sortedTextures[1]);
-    const three = textures.get(sortedTextures[2]);
+    const one = await Jimp.read(path.join("./utils/textures/" + distances[0][0]));
+    const two = await Jimp.read(path.join("./utils/textures/" + distances[1][0]));
+    const three = await Jimp.read(path.join("./utils/textures/" + distances[2][0]));
 
     // create output image
     const output = new Jimp(1440, 480);

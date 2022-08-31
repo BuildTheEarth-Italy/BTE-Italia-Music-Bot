@@ -7,7 +7,6 @@ import { config } from "../utils/config";
 import { i18n } from "../utils/i18n";
 import { MissingPermissionsException } from "../utils/MissingPermissionsException";
 import { MusicQueue } from "./MusicQueue";
-import { loadTextures } from "../utils/loadTextures";
 
 const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -16,7 +15,6 @@ export class Bot {
   public commands = new Collection<string, Command>();
   public cooldowns = new Collection<string, Collection<Snowflake, number>>();
   public queues = new Collection<Snowflake, MusicQueue>();
-  public textures: Promise<Map<any, any>>;
 
   public constructor(public readonly client: Client) {
     this.client.login(config.TOKEN);
@@ -27,8 +25,6 @@ export class Bot {
 
     this.client.on("warn", (info) => console.log(info));
     this.client.on("error", console.error);
-
-    this.textures = loadTextures();
 
     this.importCommands();
     this.onMessageCreate();

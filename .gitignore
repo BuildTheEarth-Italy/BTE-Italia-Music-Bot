@@ -5,7 +5,6 @@ config.json
 /sounds/**
 !/sounds/putmusichere.mp3
 /dist
-/textures
 
 # Logs
 logs

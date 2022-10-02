@@ -25,6 +25,8 @@ export default {
       return message.reply("thats not an image");
     }
 
+    message.channel.send("loading...");
+
     const input = await Jimp.read(attachment.url);
 
     // calculate stuff
@@ -70,9 +72,8 @@ export default {
     output.composite(two, 480, 0);
     output.composite(three, 960, 0);
 
-    const imgBuffer = await output.getBufferAsync(Jimp.MIME_PNG);
     const outputName = message.id + ".png";
-    fs.writeFileSync("./temp/" + outputName, imgBuffer);
+    await output.writeAsync("./temp" + outputName);
 
     // make embed
     const embed = new MessageEmbed()

@@ -73,7 +73,7 @@ export default {
     output.composite(three, 960, 0);
 
     const outputName = message.id + ".png";
-    await output.writeAsync("./temp" + outputName);
+    await output.writeAsync("./temp/" + outputName);
 
     // make embed
     const embed = new MessageEmbed()
